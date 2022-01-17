@@ -109,5 +109,43 @@ function favoriteRequest() {
     });
 
 };
-let timerIdFavorit = setInterval(favoriteRequest, 5000);
+// let timerIdFavorit = setInterval(favoriteRequest, 5000);
+favoriteRequest();
 
+// добавление пользователя в список избранных
+
+favoritWidget.addUserCallback = data => {
+    ApiConnector.addUserToFavorites(data, callback => {
+        if (callback.success) {
+            favoritWidget.clearTable(callback.data);
+            favoritWidget.fillTable(callback.data);
+            moneyManager.updateUsersList(callback.data);
+            favoritWidget.setMessage(callback.success, `Добавление пользователя  ${data.id} ${data.name} произошло успешно`);
+        } else {
+            favoritWidget.setMessage(callback.error, 'Произошла ошибка, добавление пользователя не произошло')
+
+        };
+
+    });
+
+
+};
+
+// удаление пользователя из избранного
+
+favoritWidget.removeUserCallback = data => {
+    ApiConnector.removeUserFromFavorites(data, callback =>{
+        if (callback.success) {
+            favoritWidget.clearTable(callback.data);
+            favoritWidget.fillTable(callback.data);
+            moneyManager.updateUsersList(callback.data);
+            favoritWidget.setMessage(callback.success, `Удаление пользователя произошло успешно`);
+        } else {
+            favoritWidget.setMessage(callback.error, 'Произошла ошибка, удаление пользователя не произошло')
+
+        };
+
+    });
+    
+
+};
