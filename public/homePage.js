@@ -50,11 +50,11 @@ moneyManager.addMoneyCallback = data => {
     ApiConnector.addMoney(data, callback => {
         if (callback.success) {
             ProfileWidget.showProfile(callback.data)
-            moneyManager.setMessage(callback.success, 'Деньги добавлены');
-            
+            moneyManager.setMessage(callback.success, 'Деньги добавлены ');
+
         } else {
             moneyManager.setMessage(callback.error, "Произошла ошибка, деньги не добавлены");
-            
+
         };
 
     });
@@ -66,15 +66,48 @@ moneyManager.conversionMoneyCallback = data => {
     ApiConnector.convertMoney(data, callback => {
         if (callback.success) {
             ProfileWidget.showProfile(callback.data)
-            moneyManager.setMessage(callback.success, 'Конвертирование валюты произошло успешно');
-            
+            moneyManager.setMessage(callback.success, `Конвертирование валюты ${data.fromCurrency} произошло успешно`);
+
         } else {
             moneyManager.setMessage(callback.error, "Произошла ошибка, конвертирование не произошло");
-            
+
         };
     });
 
 };
 
 // перевод валюты
+
+moneyManager.sendMoneyCallback = data => {
+    ApiConnector.transferMoney(data, callback => {
+        if (callback.success) {
+            ProfileWidget.showProfile(callback.data)
+            moneyManager.setMessage(callback.success, `Перевод валюты   ${data.to} ${data.currency} произошло успешно`);
+
+        } else {
+            moneyManager.setMessage(callback.error, 'Произошла ошибка, перевода не произошло');
+
+        };
+    });
+
+};
+
+// Работа с избранным:
+
+const favoritWidget = new FavoritesWidget();
+
+// начальный список избранного
+
+
+function favoriteRequest() {
+    ApiConnector.getFavorites(callback => {
+        if (callback.success) {
+            favoritWidget.clearTable(callback.data)
+            favoritWidget.fillTable(callback.data);
+            moneyManager.updateUsersList(callback.data)
+        }
+    });
+
+};
+let timerIdFavorit = setInterval(favoriteRequest, 5000);
 
