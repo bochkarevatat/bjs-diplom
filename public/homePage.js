@@ -50,14 +50,14 @@ moneyManager.addMoneyCallback = data => {
     ApiConnector.addMoney(data, callback => {
         if (callback.success) {
             ProfileWidget.showProfile(callback.data)
-            moneyManager.setMessage(callback.success, 'Деньги добавлены ');
+            moneyManager.setMessage(callback.success, `${data.amount} ${data.currency} добавлены`);
 
         } else {
-            moneyManager.setMessage(callback.error, "Произошла ошибка, деньги не добавлены");
+            moneyManager.setMessage(callback.success.false, `Произошла ошибка, ${data.amount} ${data.currency} не добавлены`);
 
         };
 
-    });
+    }); 
 };
 
 // конвертирование валюты
@@ -66,13 +66,13 @@ moneyManager.conversionMoneyCallback = data => {
     ApiConnector.convertMoney(data, callback => {
         if (callback.success) {
             ProfileWidget.showProfile(callback.data)
-            moneyManager.setMessage(callback.success, `Конвертирование валюты ${data.fromCurrency} произошло успешно`);
+            moneyManager.setMessage(callback.success, `Конвертирование валюты ${data.fromCurrency} в ${data.targetCurrency} произошло успешно`);
 
         } else {
-            moneyManager.setMessage(callback.error, "Произошла ошибка, конвертирование не произошло");
+            moneyManager.setMessage(callback.success.false, `Произошла ошибка, конвертирование ${data.fromCurrency} в ${data.targetCurrency} не произошло`);
 
         };
-    });
+    }); 
 
 };
 
@@ -82,10 +82,10 @@ moneyManager.sendMoneyCallback = data => {
     ApiConnector.transferMoney(data, callback => {
         if (callback.success) {
             ProfileWidget.showProfile(callback.data)
-            moneyManager.setMessage(callback.success, `Перевод валюты   ${data.to} ${data.currency} произошло успешно`);
+            moneyManager.setMessage(callback.success, `Перевод валюты пользователю  с id ${data.to} в сумме ${data.to} ${data.currency} произошло успешно`);
 
         } else {
-            moneyManager.setMessage(callback.error, 'Произошла ошибка, перевода не произошло');
+            moneyManager.setMessage(callback.success.false, `Произошла ошибка, перевода пользователю  с id ${data.to} в сумме ${data.amount} ${data.currency} не произошло`);
 
         };
     });
@@ -122,7 +122,7 @@ favoritWidget.addUserCallback = data => {
             moneyManager.updateUsersList(callback.data);
             favoritWidget.setMessage(callback.success, `Добавление пользователя  ${data.id} ${data.name} произошло успешно`);
         } else {
-            favoritWidget.setMessage(callback.error, 'Произошла ошибка, добавление пользователя не произошло')
+            favoritWidget.setMessage(callback.success.false, `Такой пользователь уже есть в списке`)
 
         };
 
@@ -139,9 +139,9 @@ favoritWidget.removeUserCallback = data => {
             favoritWidget.clearTable(callback.data);
             favoritWidget.fillTable(callback.data);
             moneyManager.updateUsersList(callback.data);
-            favoritWidget.setMessage(callback.success, `Удаление пользователя произошло успешно`);
+            favoritWidget.setMessage(callback.success, `Удаление пользователя ${data} произошло успешно`);
         } else {
-            favoritWidget.setMessage(callback.error, 'Произошла ошибка, удаление пользователя не произошло')
+            favoritWidget.setMessage(callback.error, `Произошла ошибка, удаление пользователя ${data} не произошло`)
 
         };
 

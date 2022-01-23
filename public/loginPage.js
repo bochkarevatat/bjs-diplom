@@ -11,7 +11,7 @@ useForm.loginFormCallback = data => {
     });
 };
 useForm.registerFormCallback = data =>{
-    ApiConnector.login(data, response =>{
+    ApiConnector.register(data, response =>{
         if (response.success) {
             location.reload();
         } else {
